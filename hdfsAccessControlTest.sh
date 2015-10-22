@@ -10,7 +10,7 @@ stopAccessRead=$(date -u +"%s")
 if [$returnValue=0]
 then
 	#output the Access read time
-	echo "Access Read time :: $(($stopWrite-$startWrite)) seconds"
+	echo "Access Read time :: $(($stopAccessRead-$startAccessRead)) seconds"
 else
 	echo "Error while reading access control list"	
 fi
