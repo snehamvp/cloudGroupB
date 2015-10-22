@@ -8,5 +8,5 @@ hdfs dfs -put zerofile /hdfsWriteTest
 #stop recording write time
 stopWrite=$(date -u +"%s")
 #output the write time
-echo "$(($stopWrite-$startWrite)) seconds"
+echo "Re-Write time :: $(($stopWrite-$startWrite)) seconds"
 
