@@ -17,5 +17,5 @@ stopAccessRead=$(date -u +"%s")
 echo "Access Read time :: $(($stopAccessRead-$startAccessRead)) seconds"
 
 #remove test data
-rm testAccessControl
+rm -r -f testAccessControl
 hdfs dfs -rm -R /testAccessControl
