@@ -1,9 +1,20 @@
 #!/bin/bash
-#start recording read time
-startRead=$(date -u +"%s")
+#create sample file for testing
+mkdir writeTest
+dd if=/dev/zero of=writeTest/zerofile bs=4M count=256 conv=fdatasync
+
+#put file on HDFS
+hdfs dfs -put writeTest /hdfsWriteTest
+
+#start recording lookup time
+startLookup=$(date -u +"%s")
 hdfs dfs -find /hdfsWriteTest zerofile
 #stop recording read time
-stopRead=$(date -u +"%s")
-#output the read time
-echo "Read time: $(($stopRead-$startRead)) second"
+stopLookup=$(date -u +"%s")
+
+#output the Lookup time
+echo "Lookup time: $(($stopLookup-$startLookup)) second"
+
+rm -r -f writeTest
+hdfs dfs -rm -R /hdfsWriteTest
 
