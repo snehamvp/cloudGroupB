@@ -1,7 +1,7 @@
 #!/bin/bash
 #create sample file for testing
 mkdir writeTest
-dd if=/dev/zero of=writeTest/zerofile bs=4M count=25 conv=fdatasync
+dd if=/dev/zero of=writeTest/zerofile bs=4M count=256 conv=fdatasync
 
 #start recording write time
 startWrite=$(date -u +"%s")

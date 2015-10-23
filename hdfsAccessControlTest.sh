@@ -1,17 +1,21 @@
 #!/bin/bash
+#create empty directory to push to HDFS
+mkdir testAccessControl
+
+#push empty directory to HDFS
+hdfs dfs -put testAccessControl /testAccessControl
+
 #start recording Access read time
 startAccessRead=$(date -u +"%s")
 
-returnValue=hdfs dfs -getfacl -R /hdfsWriteTest
+hdfs dfs -getfacl -R /testAccessControl
 
 #stop recording Access read time
 stopAccessRead=$(date -u +"%s")
 
-if [$returnValue=0]
-then
-	#output the Access read time
-	echo "Access Read time :: $(($stopAccessRead-$startAccessRead)) seconds"
-else
-	echo "Error while reading access control list"	
-fi
+#output the Access read time
+echo "Access Read time :: $(($stopAccessRead-$startAccessRead)) seconds"
 
+#remove test data
+rm testAccessControl
+hdfs dfs -rm -R /testAccessControl
