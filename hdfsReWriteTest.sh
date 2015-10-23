@@ -12,5 +12,6 @@ stopWrite=$(date -u +"%s")
 
 #output the write time
 echo "Re-Write time :: $(($stopWrite-$startWrite)) seconds"
+echo "Re-Write time, $(($stopWrite-$startWrite))" >> hdfsParamOutput.xls
 rm -r -f writeTest
 hdfs dfs -rm -R /hdfsWriteTest
