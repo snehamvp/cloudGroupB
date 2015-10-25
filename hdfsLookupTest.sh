@@ -14,6 +14,7 @@ stopLookup=$(date -u +"%s")
 
 #output the Lookup time
 echo "Lookup time: $(($stopLookup-$startLookup)) second"
+echo "Lookup time, $(($stopLookup-$startLookup))" >> hdfsParamOutput.xls
 
 rm -r -f writeTest
 hdfs dfs -rm -R /hdfsWriteTest

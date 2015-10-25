@@ -15,6 +15,7 @@ stopAccessRead=$(date -u +"%s")
 
 #output the Access read time
 echo "Access Read time :: $(($stopAccessRead-$startAccessRead)) seconds"
+echo "Access Read time, $(($stopAccessRead-$startAccessRead))" >> hdfsParamOutput.xls
 
 #remove test data
 rm -r -f testAccessControl

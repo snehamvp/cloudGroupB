@@ -13,7 +13,7 @@ stopRead=$(date -u +"%s")
 
 #output the re-read time
 echo "Re-Read time: $(($stopRead-$startRead)) second"
-
+echo "Re-Read time, $(($stopRead-$startRead))" >> hdfsParamOutput.xls
 rm -r -f writeTest
 hdfs dfs -rm -R /hdfsWriteTest
 rm zerofile
