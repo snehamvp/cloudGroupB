@@ -1,7 +1,7 @@
 #!/bin/bash
 #create sample file for testing
 mkdir writeTest
-dd if=/dev/zero of=writeTest/zerofile bs=4M count=256 conv=fdatasync
+dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
 
 #start recording write time
 startWrite=$(date -u +"%s")
@@ -19,3 +19,7 @@ else
 fi
 rm -r -f writeTest
 hdfs dfs -rm -R /hdfsWriteTest
+
+
+
+
