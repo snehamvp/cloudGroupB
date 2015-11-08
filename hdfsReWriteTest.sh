@@ -1,12 +1,14 @@
 #!/bin/bash
+export hdfsPath=/usr/local/hadoop/bin/$hdfsPath
+
 #create sample file for testing
 mkdir writeTest
 dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
-hdfs dfs -put writeTest /hdfsWriteTest
+$hdfsPath dfs -put writeTest /hdfsWriteTest
 
 #start recording write time
 startWrite=$(date -u +"%s")
-hdfs dfs -put zerofile /hdfsWriteTest
+$hdfsPath dfs -put zerofile /hdfsWriteTest
 #stop recording write time
 stopWrite=$(date -u +"%s")
 
@@ -14,4 +16,4 @@ stopWrite=$(date -u +"%s")
 echo "Re-Write time :: $(($stopWrite-$startWrite)) seconds"
 echo "Re-Write time, $(($stopWrite-$startWrite))" >> hdfsParamOutput.xls
 rm -r -f writeTest
-hdfs dfs -rm -R /hdfsWriteTest
+$hdfsPath dfs -rm -R /hdfsWriteTest

@@ -1,15 +1,17 @@
 #!/bin/bash
+export hdfsPath=/usr/local/hadoop/bin/$hdfsPath
+
 #create sample file for testing
 mkdir writeTest
 dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
-hdfs dfs -put writeTest /hdfsWriteTest
+$hdfsPath dfs -put writeTest /hdfsWriteTest
 
 #Stop 2 data nodes
 ssh hduser@hdfsMaster "ssh hduser@hdfsSlave1 \"bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit\"; ssh hduser@hdfsSlave2 \"bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit\"; exit"
 
 #start recording read time
 startRead=$(date -u +"%s")
-hdfs dfs -get /hdfsWriteTest/zerofile
+$hdfsPath dfs -get /hdfsWriteTest/zerofile
 returnValue=$?
 #stop recording read time
 stopRead=$(date -u +"%s")
@@ -23,5 +25,5 @@ else
 	echo "Error while reading"	
 fi
 rm -r -f writeTest
-hdfs dfs -rm -R /hdfsWriteTest
+$hdfsPath dfs -rm -R /hdfsWriteTest
 rm zerofile

@@ -1,7 +1,7 @@
 #!/bin/bash
-#create sample file for testing
 export hdfsPath=/usr/local/hadoop/bin/hdfs
 
+#create sample file for testing
 mkdir writeTest
 dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
 $hdfsPath dfs -put writeTest /hdfsWriteTest

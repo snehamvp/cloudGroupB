@@ -1,11 +1,13 @@
 #!/bin/bash
+export hdfsPath=/usr/local/hadoop/bin/$hdfsPath
+
 #create sample file for testing
 mkdir writeTest
 dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
 
 #start recording write time
 startWrite=$(date -u +"%s")
-hdfs dfs -put writeTest /hdfsWriteTest
+$hdfsPath dfs -put writeTest /hdfsWriteTest
 returnValue=$?
 #stop recording write time
 stopWrite=$(date -u +"%s")
@@ -18,7 +20,7 @@ else
 	echo "Error while writing"	
 fi
 rm -r -f writeTest
-hdfs dfs -rm -R /hdfsWriteTest
+$hdfsPath dfs -rm -R /hdfsWriteTest
 
 
 

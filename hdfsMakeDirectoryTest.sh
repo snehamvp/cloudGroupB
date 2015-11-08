@@ -1,11 +1,13 @@
 #!/bin/bash
+export hdfsPath=/usr/local/hadoop/bin/$hdfsPath
+
 #start recording Directory create time
 startDirectoryCreate=$(date -u +"%s")
 
 for i in $(seq 1 100)
 do
 	dirName=/hdfsCreateDirectoryTest+$i
-	returnValue=hdfs dfs -mkdir $dirName
+	returnValue=$hdfsPath dfs -mkdir $dirName
 done
 
 #stop recording Directory create time

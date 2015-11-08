@@ -1,11 +1,13 @@
 #!/bin/bash
+export hdfsPath=/usr/local/hadoop/bin/$hdfsPath
+
 #start recording Directory deletion time
 startDirectoryDelete=$(date -u +"%s")
 
 for i in $(seq 1 100)
 do
 	dirName=/hdfsCreateDirectoryTest+$i
-	returnValue=hdfs dfs -rm -skipTrash $dirName
+	returnValue=$hdfsPath dfs -rm -skipTrash $dirName
 done
 
 #stop recording Directory deletion time
