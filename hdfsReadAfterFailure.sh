@@ -7,7 +7,9 @@ dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
 $hdfsPath dfs -put writeTest /hdfsWriteTest
 
 #Stop 2 data nodes
-ssh hduser@hdfsMaster "ssh hduser@hdfsSlave1 \"bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit\"; ssh hduser@hdfsSlave2 \"bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit\"; exit"
+ssh hduser@hdfsSlave1 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
+ssh hduser@hdfsSlave2 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
+ssh hduser@hdfsSlave3 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 
 #start recording read time
 startRead=$(date -u +"%s")
@@ -29,4 +31,6 @@ $hdfsPath dfs -rm -R /hdfsWriteTest
 rm zerofile
 
 #Start 2 data nodes
-ssh hduser@hdfsMaster "ssh hduser@hdfsSlave1 \"bash /usr/local/hadoop/sbin/hadoop-daemon.sh start datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh start nodemanager; jps; exit\"; ssh hduser@hdfsSlave2 \"bash /usr/local/hadoop/sbin/hadoop-daemon.sh start datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh start nodemanager; jps; exit\"; exit"
+ssh hduser@hdfsSlave1 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh start datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh start nodemanager; jps; exit"
+ssh hduser@hdfsSlave2 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh start datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh start nodemanager; jps; exit"
+ssh hduser@hdfsSlave3 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh start datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh start nodemanager; jps; exit"
