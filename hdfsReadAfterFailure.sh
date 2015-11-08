@@ -1,5 +1,5 @@
 #!/bin/bash
-export hdfsPath=/usr/local/hadoop/bin/$hdfsPath
+export hdfsPath=/usr/local/hadoop/bin/hdfs
 
 #create sample file for testing
 mkdir writeTest
