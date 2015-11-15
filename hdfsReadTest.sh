@@ -8,7 +8,9 @@ $hdfsPath dfs -put writeTest /hdfsWriteTest
 
 #start recording read time
 startRead=$(date -u +"%s")
-$hdfsPath dfs -get /hdfsWriteTest/zerofile
+pathVal="$($hdfsPath dfs -find / -name zerofile)"
+echo "pathVal= $pathVal"
+$hdfsPath dfs -get $pathVal
 returnValue=$?
 #stop recording read time
 stopRead=$(date -u +"%s")
