@@ -10,7 +10,8 @@ $hdfsPath dfs -put writeTest /hdfsWriteTest
 
 #start recording lookup time
 startLookup=$(date -u +"%s")
-$hdfsPath dfs -find /hdfsWriteTest zerofile
+#$hdfsPath dfs -find /hdfsWriteTest zerofile
+$hdfsPath dfs -find / -name largeFile.csv 
 #stop recording read time
 stopLookup=$(date -u +"%s")
 
