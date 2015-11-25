@@ -1,35 +1,15 @@
 #!/bin/bash
-function hdfsRead {
-        #start recording read time
-        startRead=$(date -u +"%s")
-	pathValue="$($hdfsPath dfs -find / -name zerofile)"
-        $hdfsPath dfs -get $pathValue
-        returnValue=$?
-        #stop recording read time
-        stopRead=$(date -u +"%s")
-
-        if [ "$returnValue" == 0 ]
-        then
-                #output the read time
-                echo "Read Time: $(($stopRead-$startRead)) second"
-                echo "Read Time After Failure, $(($stopRead-$startRead))" >> hdfsParamOutput.xls
-        else
-                echo "Error while reading. Time taken:: $(($stopRead-$startRead))" 
-                echo "Read Time After Failure(Error while reading), $(($stopRead-$startRead))" >> hdfsParamOutput.xls
-        fi
-	rm zerofile
-}
 export hdfsPath=/usr/local/hadoop/bin/hdfs
 
 #create sample file for testing
-mkdir writeTest
-dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
-$hdfsPath dfs -put writeTest /hdfsWriteTest
+mkdir writeTest1
+dd if=/dev/zero of=writeTest1/zerofile1 bs=$1 count=$2 conv=fdatasync
+$hdfsPath dfs -put writeTest1 /hdfsWriteTest1
 
-rm -R writeTest
+rm -R writeTest1
 
 #Get the block distribution of the file written on datanodes
-pathVal="$($hdfsPath dfs -find / -name zerofile)"
+pathVal="$($hdfsPath dfs -find / -name zerofile1)"
 echo "pathVal= $pathVal"
 block1=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.100"))
 block2=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.22"))
@@ -88,17 +68,17 @@ set +f
 #echo "${ipArray[@]}"
 ip1=${ipArray[0]}
 IFS=' ' read -ra ips1 <<< "$ip1"
-echo "First Datanode: ${ips1[0]}"
+echo "${ips1[0]}"
 ip1=${ips1[0]}
 
 ip2=${ipArray[1]}
 IFS=' ' read -ra ips2 <<< "$ip2"
-echo "Second Datanode: ${ips2[0]}"
+echo "${ips2[0]}"
 ip2=${ips2[0]}
 
 ip3=${ipArray[2]}
 IFS=' ' read -ra ips3 <<< "$ip3"
-echo "Third Datanode: ${ips3[0]}"
+echo "${ips3[0]}"
 ip3=${ips3[0]}
 
 #Stop data nodes that contain maximum blocks
@@ -106,32 +86,32 @@ ssh hduser@$ip1 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bas
 ssh hduser@$ip2 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 ssh hduser@$ip3 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 
-echo "Starting to read after failure..."
-hdfsRead
+echo "Starting to Write after failure..."
+bash hdfsWriteTest.sh 1M 500
 
-# Sleep for every 3 minutes and then issue a read request
+# Sleep for 3 minutes and then issue a write request
 sleep 3m
-echo "Reading after 3 mins of failure..."
-hdfsRead
-
-sleep 3m
-echo "Reading after 6 mins of failure..."
-hdfsRead
+echo "Write after 3 mins of failure..."
+bash hdfsWriteTest.sh 1M 500
 
 sleep 3m
-echo "Reading after 9 mins of failure..."
-hdfsRead
+echo "Write after 6 mins of failure..."
+bash hdfsWriteTest.sh 1M 500
 
 sleep 3m
-echo "Reading after 12 mins of failure..."
-hdfsRead
+echo "Write after 9 mins of failure..."
+bash hdfsWriteTest.sh 1M 500
 
 sleep 3m
-echo "Reading after 15 mins of failure..."
-hdfsRead
+echo "Write after 12 mins of failure..."
+bash hdfsWriteTest.sh 1M 500
 
 sleep 3m
-echo "Reading after 18 mins of failure..."
-hdfsRead
+echo "Write after 15 mins of failure..."
+bash hdfsWriteTest.sh 1M 500
 
-$hdfsPath dfs -rm -R /hdfsWriteTest
+sleep 3m
+echo "Write after 18 mins of failure..."
+bash hdfsWriteTest.sh 1M 500
+
+$hdfsPath dfs -rm -R /hdfsWriteTest1
