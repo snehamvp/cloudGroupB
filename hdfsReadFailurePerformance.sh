@@ -1,25 +1,4 @@
 #!/bin/bash
-
-function read {
-	#start recording read time
-	startRead=$(date -u +"%s")
-	$1 dfs -get $2
-	returnValue=$?
-	#stop recording read time
-	stopRead=$(date -u +"%s")
-
-	if [ "$returnValue" == 0 ]
-	then
-	        #output the read time
-	        echo "Read Time: $(($stopRead-$startRead)) second"
-	        echo "Read Time After Failure, $(($stopRead-$startRead))" >> hdfsParamOutput.xls
-	else
-	        echo "Error while reading. Time taken:: $(($stopRead-$startRead))" 
-	        echo "Read Time After Failure(Error while reading), $(($stopRead-$startRead))" >> hdfsParamOutput.xls
-	fi
-}
-
-
 export hdfsPath=/usr/local/hadoop/bin/hdfs
 
 #create sample file for testing
@@ -105,15 +84,42 @@ ssh hduser@$ip1 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bas
 ssh hduser@$ip2 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 ssh hduser@$ip3 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 
+echo "Starting to read after failure..."
+read
+
 # Sleep for 15 minutes and then issue a read request
 sleep 15m
-read $hdfsPath $pathVal
+echo "Reading after 15 mins of failure..."
+read
 
 sleep 15m
-read $hdfsPath $pathVal
+echo "Reading after 30 mins of failure..."
+read
 
 sleep 15m
-read $hdfsPath $pathVal
+echo "Reading after 45 mins of failure..."
+read
 
 sleep 15m
-read $hdfsPath $pathVal
+echo "Reading after 1 hour of failure..."
+read
+
+function read {
+        #start recording read time
+        startRead=$(date -u +"%s")
+        $hdfsPath dfs -get $pathVal
+        returnValue=$?
+        #stop recording read time
+        stopRead=$(date -u +"%s")
+
+        if [ "$returnValue" == 0 ]
+        then
+                #output the read time
+                echo "Read Time: $(($stopRead-$startRead)) second"
+                echo "Read Time After Failure, $(($stopRead-$startRead))" >> hdfsParamOutput.xls
+        else
+                echo "Error while reading. Time taken:: $(($stopRead-$startRead))" 
+                echo "Read Time After Failure(Error while reading), $(($stopRead-$startRead))" >> hdfsParamOutput.xls
+        fi
+}
+
