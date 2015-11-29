@@ -18,4 +18,4 @@ ssh groupb@groupb23 "virsh start hdfsSlave6; virsh start hdfsSlave7; virsh start
 #Start the HDFS Master VM
 echo "Starting hdfsSlaves 8 and 9, and hdfsMaster"
 sleep 2s
-ssh groupb@groupb13 "virsh start hdfsSlave8; virsh start hdfsSlave9; sleep 10s; virsh start hdfsMaster; sleep 15s; ssh hduser@hdfsMaster \"/usr/local/hadoop/sbin/start-dfs.sh; /usr/local/hadoop/sbin/start-yarn.sh; sleep 10s; /usr/local/hadoop/bin/hdfs dfsadmin -report; exit;\"; exit"
+ssh groupb@groupb13 "virsh start hdfsSlave8; virsh start hdfsSlave9; sleep 10s; virsh start hdfsMaster; sleep 30s; ssh hduser@hdfsMaster \"/usr/local/hadoop/sbin/start-dfs.sh; /usr/local/hadoop/sbin/start-yarn.sh; sleep 10s; /usr/local/hadoop/bin/hdfs dfsadmin -report; exit;\"; exit"
