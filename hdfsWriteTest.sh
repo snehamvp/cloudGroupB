@@ -6,16 +6,16 @@ mkdir writeTest
 dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
 
 #start recording write time
-startWrite=$(date -u +"%s")
+startWrite=$(($(date +%s%N)/1000000))
 $hdfsPath dfs -put writeTest /hdfsWriteTest
 returnValue=$?
 #stop recording write time
-stopWrite=$(date -u +"%s")
+stopWrite=$(($(date +%s%N)/1000000))
 if [ "$returnValue" == 0 ]
 then
 	#output the write time
-	echo "Write Time: $(($stopWrite-$startWrite)) seconds"
-	echo "$($1*$2), $(($stopWrite-$startWrite))" >> hdfsWriteOutput.xls
+	echo "Write Time: $(($stopWrite-$startWrite)) ms"
+	echo "$(($1*$2/1000)), $(($stopWrite-$startWrite))" >> hdfsWriteOutput.xls
 else
 	echo "Error while writing"	
 fi

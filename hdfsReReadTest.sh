@@ -8,14 +8,14 @@ $hdfsPath dfs -put writeTest /hdfsWriteTest
 $hdfsPath dfs -get /hdfsWriteTest/zerofile
 
 #start recording read time
-startRead=$(date -u +"%s")
+startRead=$(($(date +%s%N)/1000000))
 $hdfsPath dfs -get /hdfsWriteTest/zerofile
 #stop recording read time
-stopRead=$(date -u +"%s")
+stopRead=$(($(date +%s%N)/1000000))
 
 #output the re-read time
-echo "Re-Read time: $(($stopRead-$startRead)) second"
-echo "Re-Read time, $(($stopRead-$startRead))" >> hdfsParamOutput.xls
+echo "Re-Read time: $(($stopRead-$startRead)) ms"
+echo "$(($1*$2/1000)), $(($stopRead-$startRead))" >> hdfsReReadOutput.xls
 rm -r -f writeTest
 $hdfsPath dfs -rm -R /hdfsWriteTest
 rm zerofile
