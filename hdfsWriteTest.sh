@@ -15,7 +15,7 @@ if [ "$returnValue" == 0 ]
 then
 	#output the write time
 	echo "Write Time: $(($stopWrite-$startWrite)) seconds"
-	echo "Write Time, $(($stopWrite-$startWrite))" >> hdfsParamOutput.xls
+	echo "$($1*$2), $(($stopWrite-$startWrite))" >> hdfsWriteOutput.xls
 else
 	echo "Error while writing"	
 fi
