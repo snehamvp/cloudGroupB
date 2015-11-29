@@ -19,7 +19,7 @@ if [ "$returnValue" == 0 ]
 then
 	#output the read time
 	echo "Read Time: $(($stopRead-$startRead)) second"
-	echo "Read Time, $(($stopRead-$startRead))" >> hdfsParamOutput.xls
+	echo "$($1*$2), $(($stopRead-$startRead))" >> hdfsReadOutput.xls
 else
 	echo "Error while reading"	
 fi
