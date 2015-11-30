@@ -1,16 +1,16 @@
 #!/bin/bash
 # create sample file for testing
 
-dd if=/dev/urandom of=randomFile1 bs=4M count=10 conv=fdatasync
+dd if=/dev/urandom of=ReadAfterFailureFile bs=4M count=250 conv=fdatasync
 
 # upload file on swift
-swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass upload myfiles randomFile1
+swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass upload ReadAfterFailure ReadAfterFailureFile
 
 # delete the file from local filesystem
 rm randomFile1
 
 # store the output of the get nodes in a file
-swift-get-nodes object.ring.gz AUTH_system myfiles randomFile1 >> nodesOutputFile
+swift-get-nodes object.ring.gz AUTH_system ReadAfterFailure ReadAfterFailureFile >> nodesOutputFile
 
 # parse the output of the get nodes and get the first 3 ip addresses to make those machines go down
 grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' nodesOutputFile >> iPAddressesFile
@@ -25,15 +25,15 @@ echo "IPAddres--------- $IPADDRESS2"
 ssh swift@$IPADDRESS2 "swift-init all stop; exit"
 
 # start recording lookup time
-startLookup=$(($(date -u +%s)*1000))
+startLookup=$(date -u +%s%3N)
  
 # read the file
-swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass download myfiles randomFile1
+swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass download ReadAfterFailure ReadAfterFailureFile
 returnValue=$?
 echo "return value ------------------- $returnValue"
 
 # stop recording read time
-stopLookup=$(($(date -u +%s)*1000))
+stopLookup=$(date -u +%s%3N)
 
 if [ "$returnValue" == 0 ]
 then
@@ -41,8 +41,8 @@ then
 	echo "Read Time: $(($stopLookup-$startLookup)) ms"
 	echo "Read Time: $(($stopLookup-$startLookup)) ms" >> /home/swift/CustomizedResult/LookupAfterFailure.xls
 else
-	echo "Error while reading. Time taken : $(($stopLookup-$startLookup))" 
-	echo "Error while reading. Time taken : $(($stopLookup-$startLookup))" >> /home/swift/CustomizedResult/LookupAfterFailure.xls
+	echo "Error while reading. Time taken : $(($stopLookup-$startLookup)) ms" 
+	echo "Error while reading. Time taken : $(($stopLookup-$startLookup)) ms" >> /home/swift/CustomizedResult/LookupAfterFailure.xls
 fi
 echo "if done"
 
@@ -56,11 +56,11 @@ IPADDRESS2=$(head -2 iPAddressesFile | tail -1)
 ssh swift@$IPADDRESS2 "swift-init all start; exit"
 
 # delete file from swift file system
-swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass delete myfiles
+swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass delete ReadAfterFailure
 echo "Deletion of file done"
 
 # delete the file from local filesystem
 rm nodesOutputFile
 rm iPAddressesFile
-rm randomFile1
+rm ReadAfterFailureFile
 
