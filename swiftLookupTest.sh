@@ -14,7 +14,7 @@ rm -r -f randomFile*
 done
 
 # start recording lookup time
-startLookup=$(($(date -u +%s)*1000))
+startLookup=$($(date -u +%s%3N))
 #curl --insecure -i  https://$PROXY_LOCAL_NET_IP:8080/v1/AUTH_system/myfiles/randomFile2 -X HEAD -H "X-Auth-Token: AUTH_tkf363e225ad6c4fe485153b8c2d39d11d"
 
 #swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass stat myfiles randomFile10
@@ -22,7 +22,7 @@ startLookup=$(($(date -u +%s)*1000))
 swift-get-nodes object.ring.gz AUTH_system myfiles randomFile4
 
 # stop recording read time
-stopLookup=$(($(date -u +%s)*1000))
+stopLookup=$($(date -u +%s%3N))
 
 # output the Lookup time
 echo "Lookup time: $(($stopLookup-$startLookup)) ms" >> /home/swift/CustomizedResult/Lookup.xls
