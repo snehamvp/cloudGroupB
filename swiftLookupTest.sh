@@ -14,12 +14,12 @@ rm -r -f LookUpFile*
 done
 
 # start recording lookup time
-startLookup=$($(date -u +%s%3N))
+startLookup=$(date -u +%s%3N)
 
 swift-get-nodes object.ring.gz AUTH_system LookUp LookUpFile10
 
 # stop recording read time
-stopLookup=$($(date -u +%s%3N))
+stopLookup=$(date -u +%s%3N)
 
 # output the Lookup time
 echo "Lookup time: $(($stopLookup-$startLookup)) ms" >> /home/swift/CustomizedResult/Lookup.xls
