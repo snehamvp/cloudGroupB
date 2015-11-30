@@ -9,15 +9,17 @@ dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
 $hdfsPath dfs -put writeTest /hdfsWriteTest
 
 #start recording lookup time
-startLookup=$(date -u +"%s")
+startLookup=$(date +%s%N)
 #$hdfsPath dfs -find /hdfsWriteTest zerofile
 $hdfsPath dfs -find / -name largeFile.csv 
 #stop recording read time
-stopLookup=$(date -u +"%s")
+stopLookup=$(date %s%N)
 
 #output the Lookup time
-echo "Lookup time: $(($stopLookup-$startLookup)) second"
-echo "Lookup time, $(($stopLookup-$startLookup))" >> hdfsParamOutput.xls
+lookupTimeNano=$(($stopLookup-$startLookup))
+lookupTime=$(($lookupTimeNano/1000000))
+echo "Lookup time: $lookupTime ms"
+echo "Lookup time, $lookupTime" >> hdfsLookupOutput.xls
 
 rm -r -f writeTest
 $hdfsPath dfs -rm -R /hdfsWriteTest
