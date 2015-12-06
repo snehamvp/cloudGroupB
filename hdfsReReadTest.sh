@@ -6,6 +6,7 @@ mkdir writeTest
 dd if=/dev/zero of=writeTest/zerofile bs=$1 count=$2 conv=fdatasync
 $hdfsPath dfs -put writeTest /hdfsWriteTest
 $hdfsPath dfs -get /hdfsWriteTest/zerofile
+rm zerofile
 
 #start recording read time
 startRead=$(date +%s%N)
