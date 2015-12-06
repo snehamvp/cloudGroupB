@@ -10,7 +10,7 @@ swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K
 rm randomFile1
 
 # start recording lookup time
-startLookup=$(($(date -u +%s)*1000))
+startLookup=$(date -u +%s%3N)
  
 # read the file
 swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass download myfiles randomFile1
@@ -18,7 +18,7 @@ returnValue=$?
 echo "return value ------------------- $returnValue"
 
 # stop recording read time
-stopLookup=$(($(date -u +%s)*1000))
+stopLookup=$(date -u +%s%3N)
 
 if [ "$returnValue" == 0 ]
 then
