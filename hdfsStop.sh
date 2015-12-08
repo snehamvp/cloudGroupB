@@ -14,9 +14,9 @@ echo "Stopping hdfsSlaves 4, 5, 12, 13 and 14"
 sleep 2s
 ssh groupb@groupb22 "ssh hduser@hdfsSlave4 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave5 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave12 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave13 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave14 \"sudo shutdown -P now\"; exit"
 
-echo "Stopping hdfsSlaves 6, 7, 15, 16 and 17"
+echo "Stopping hdfsSlaves 6, 7, 15, 16, 17, 18, 19 and 20"
 sleep 2s
-ssh groupb@groupb23 "ssh hduser@hdfsSlave6 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave7 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave15 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave16 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave17 \"sudo shutdown -P now\"; exit"
+ssh groupb@groupb23 "ssh hduser@hdfsSlave6 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave7 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave15 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave16 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave17 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave18 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave19 \"sudo shutdown -P now\"; ssh hduser@hdfsSlave20 \"sudo shutdown -P now\"; exit"
 
 #Shutdown hdfsMaster
 ssh groupb@groupb13 "ssh hduser@hdfsMaster \"sudo shutdown -P now\"; exit"
