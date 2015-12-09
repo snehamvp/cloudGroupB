@@ -40,6 +40,30 @@ swift-ring-builder account.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6002/$DEVICE
 swift-ring-builder container.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6001/$DEVICE $WEIGHT
 swift-ring-builder object.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6000/$DEVICE $WEIGHT
 
+export ZONE=1                    # set the zone number for that storage device
+export STORAGE_LOCAL_NET_IP=10.176.128.87    # and the IP address
+export WEIGHT=15               # relative weight (higher for bigger/faster disks)
+export DEVICE=sdb1
+swift-ring-builder account.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6002/$DEVICE $WEIGHT
+swift-ring-builder container.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6001/$DEVICE $WEIGHT
+swift-ring-builder object.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6000/$DEVICE $WEIGHT
+
+export ZONE=1                    # set the zone number for that storage device
+export STORAGE_LOCAL_NET_IP=10.176.128.88    # and the IP address
+export WEIGHT=28               # relative weight (higher for bigger/faster disks)
+export DEVICE=sdb1
+swift-ring-builder account.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6002/$DEVICE $WEIGHT
+swift-ring-builder container.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6001/$DEVICE $WEIGHT
+swift-ring-builder object.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6000/$DEVICE $WEIGHT
+
+export ZONE=1                    # set the zone number for that storage device
+export STORAGE_LOCAL_NET_IP=10.176.128.89    # and the IP address
+export WEIGHT=50               # relative weight (higher for bigger/faster disks)
+export DEVICE=sdb1
+swift-ring-builder account.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6002/$DEVICE $WEIGHT
+swift-ring-builder container.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6001/$DEVICE $WEIGHT
+swift-ring-builder object.builder add z$ZONE-$STORAGE_LOCAL_NET_IP:6000/$DEVICE $WEIGHT
+
 export ZONE=2                    # set the zone number for that storage device
 export STORAGE_LOCAL_NET_IP=10.176.128.76    # and the IP address
 export WEIGHT=20               # relative weight (higher for bigger/faster disks)
