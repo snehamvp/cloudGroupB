@@ -12,10 +12,10 @@ function hdfsRead {
         then
                 #output the read time
                 echo "Read Time: $(($stopRead-$startRead)) second"
-                echo "Read Time After Failure, $(($stopRead-$startRead))" >> hdfsParamOutput.xls
+                echo "Read Time After Failure, $(($stopRead-$startRead))" >> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
         else
                 echo "Error while reading. Time taken:: $(($stopRead-$startRead))" 
-                echo "Read Time After Failure(Error while reading), $(($stopRead-$startRead))" >> hdfsParamOutput.xls
+                echo "Read Time After Failure(Error while reading), $(($stopRead-$startRead))" >> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
         fi
 	rm zerofile
 }
@@ -48,6 +48,9 @@ block14=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.1
 block15=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.65"))
 block16=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.66"))
 block17=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.67"))
+block18=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.68"))
+block19=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.69"))
+block20=($($hdfsPath fsck $pathVal -files -blocks -locations | grep -c "10.176.128.70"))
 
 #Create an associative array of [IP] and [block distribution]
 declare -A blocksIP
@@ -68,7 +71,10 @@ blocksIP=(
 	["10.176.128.56"]=$block14
 	["10.176.128.65"]=$block15
 	["10.176.128.66"]=$block16
-	["10.176.128.67"]=$block17)
+	["10.176.128.67"]=$block17
+	["10.176.128.67"]=$block18
+	["10.176.128.67"]=$block19
+	["10.176.128.67"]=$block20)
 
 #echo "${blocksIP[@]}"
 
@@ -101,37 +107,40 @@ IFS=' ' read -ra ips3 <<< "$ip3"
 echo "Third Datanode: ${ips3[0]}"
 ip3=${ips3[0]}
 
+echo "Reading before failure.......">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
+hdfsRead
+
 #Stop data nodes that contain maximum blocks
 ssh hduser@$ip1 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 ssh hduser@$ip2 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 ssh hduser@$ip3 "bash /usr/local/hadoop/sbin/hadoop-daemon.sh stop datanode; bash /usr/local/hadoop/sbin/yarn-daemon.sh stop nodemanager; jps; exit"
 
-echo "Starting to read after failure..."
+echo "Starting to read after failure...">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 hdfsRead
 
 # Sleep for every 3 minutes and then issue a read request
 sleep 3m
-echo "Reading after 3 mins of failure..."
+echo "Reading after 3 mins of failure...">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 hdfsRead
 
 sleep 3m
-echo "Reading after 6 mins of failure..."
+echo "Reading after 6 mins of failure...">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 hdfsRead
 
 sleep 3m
-echo "Reading after 9 mins of failure..."
+echo "Reading after 9 mins of failure...">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 hdfsRead
 
 sleep 3m
-echo "Reading after 12 mins of failure..."
+echo "Reading after 12 mins of failure...">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 hdfsRead
 
 sleep 3m
-echo "Reading after 15 mins of failure..."
+echo "Reading after 15 mins of failure...">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 hdfsRead
 
 sleep 3m
-echo "Reading after 18 mins of failure..."
+echo "Reading after 18 mins of failure...">> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 hdfsRead
 
 $hdfsPath dfs -rm -R /hdfsWriteTest
