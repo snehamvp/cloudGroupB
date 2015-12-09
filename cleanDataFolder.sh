@@ -18,6 +18,9 @@ ssh hdfsSlave14 "rm -r -f /app/hadoop/tmp/dfs/data;exit"
 ssh hdfsSlave15 "rm -r -f /app/hadoop/tmp/dfs/data;exit"
 ssh hdfsSlave16 "rm -r -f /app/hadoop/tmp/dfs/data;exit"
 ssh hdfsSlave17 "rm -r -f /app/hadoop/tmp/dfs/data;exit"
+ssh hdfsSlave18 "rm -r -f /app/hadoop/tmp/dfs/data;exit"
+ssh hdfsSlave19 "rm -r -f /app/hadoop/tmp/dfs/data;exit"
+ssh hdfsSlave20 "rm -r -f /app/hadoop/tmp/dfs/data;exit"
 /usr/local/hadoop/bin/hadoop namenode -format
 
 
