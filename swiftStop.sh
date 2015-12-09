@@ -18,7 +18,13 @@ echo -e "\n\nStopping storageNode 11,12,13,14 and 15"
 sleep 2s
 ssh groupbslave1@groupb12 "sleep 10s; ssh swift@storageNode11 \"swift-init all stop; sudo shutdown -P now;\";  sleep 10s; ssh swift@storageNode12  \"swift-init all stop; sudo shutdown -P now;\";  sleep 10s; ssh swift@storageNode13  \"swift-init all stop; sudo shutdown -P now;\";  sleep 10s; ssh swift@storageNode14  \"swift-init all stop; sudo shutdown -P now;\"; sleep 10s; ssh swift@storageNode15  \"swift-init all stop; sudo shutdown -P now;\"; exit"
 
+echo -e "\n\nStopping storageNode 18,19 and 20"
+sleep 2s
+ssh groupb@groupb13 "sleep 10s; ssh swift@storageNode18 \"swift-init all stop; sudo shutdown -P now;\";  sleep 10s; ssh swift@storageNode19  \"swift-init all stop; sudo shutdown -P now;\";  sleep 10s; ssh swift@storageNode20  \"swift-init all stop; sudo shutdown -P now;\"; exit"
+
 echo -e "\n\n *** Stopped all Swift nodes and services ***"
+
+
 
 
 

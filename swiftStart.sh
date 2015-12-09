@@ -18,4 +18,7 @@ echo -e "\n Starting storagenode 11,12,13,14 and 15"
 sleep 15s
 ssh groupbslave1@groupb12 "virsh start storageNode11; sleep 5s; ssh swift@storageNode11 \"swift-init all start; exit;\"; virsh start storageNode12; sleep 5s; ssh swift@storageNode12 \"swift-init all start; exit;\"; virsh start storageNode13; sleep 5s; ssh swift@storageNode13 \"swift-init all start; exit;\"; virsh start storageNode14; sleep 5s; ssh swift@storageNode14 \"swift-init all start; exit;\"; virsh start storageNode15; sleep 5s; ssh swift@storageNode15 \"swift-init all start; exit;\"; exit"
 
+echo -e "\n Starting storagenode 18,19 and 20"
+sleep 15s
+ssh groupb@groupb13 "virsh start storageNode18; sleep 5s; ssh swift@storageNode18 \"swift-init all start; exit;\"; virsh start storageNode19; sleep 5s; ssh swift@storageNode19 \"swift-init all start; exit;\"; virsh start storageNode20; sleep 5s; ssh swift@storageNode20 \"swift-init all start; exit;\";exit"
 echo -e "\n\n ******** All the swift nodes and services have started ********"
