@@ -22,9 +22,8 @@ then
 	writeTimeNano=$(($stopWrite-$startWrite))
 	writeTime=$(($writeTimeNano/1000000))
 	echo "Write Time: $writeTime ms"
-	echo "$(($1*$2/1000)), $writeTime" >> hdfsWriteOutput.xls
+	#echo "$(($1*$2/1000)), $writeTime" >> hdfsWriteOutput.xls
 else
 	echo "Error while writing"	
 fi
 rm -r -f writeTest
-$hdfsPath dfs -rm -R $randomDir
