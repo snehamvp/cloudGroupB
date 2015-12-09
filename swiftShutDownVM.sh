@@ -4,7 +4,7 @@
 dd if=/dev/urandom of=randomFile1 bs=4M count=10 conv=fdatasync
 
 # upload file on swift
-swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass upload myfiles randomFile1
+swift --insecure -A https://proxyNode:8080/auth/v1.0 -U system:root -K testpass upload myfiles randomFile1
 
 # delete the file from local filesystem
 rm randomFile1
@@ -20,9 +20,9 @@ IPADDRESS1=$(head -1 iPAddressesFile)
 echo "IPAddres--------- $IPADDRESS1"
 ssh swift@$IPADDRESS1 "swift-init all stop; sudo shutdown -P now; exit"
 # get the 2nd machine down
-IPADDRESS2=$(head -2 iPAddressesFile | tail -1)
-echo "IPAddres--------- $IPADDRESS2"
-ssh swift@$IPADDRESS2 "swift-init all stop; sudo shutdown -P now; exit"
+#IPADDRESS2=$(head -2 iPAddressesFile | tail -1)
+#echo "IPAddres--------- $IPADDRESS2"
+#ssh swift@$IPADDRESS2 "swift-init all stop; sudo shutdown -P now; exit"
 
 # start recording lookup time
 startLookup=$(($(date -u +%s)*1000))
