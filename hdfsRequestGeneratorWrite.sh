@@ -1,7 +1,7 @@
 #!/bin/bash
-#takes four arguments:
+#takes three arguments:
 #First: block size, Second: number of blocks
-#Third: random directory path, Fourth:Random Number to be appended in the file name
+#Third: random directory path
 export hdfsPath=/usr/local/hadoop/bin/hdfs
 filename="zerofile"
 echo "File name to be created: $filename"
@@ -23,7 +23,7 @@ then
 	writeTimeNano=$(($stopWrite-$startWrite))
 	writeTime=$(($writeTimeNano/1000000))
 	echo "Write Time: $writeTime ms"
-	#echo "$(($1*$2/1000)), $writeTime" >> hdfsWriteOutput.xls
+	echo "Write Operation(500MB), $writeTime" >> /home/hduser/Desktop/ReqGenOutput/hdfsWriteOutput.xls
 else
 	echo "Error while writing"	
 fi
