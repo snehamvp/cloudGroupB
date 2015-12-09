@@ -3,16 +3,17 @@
 #First: block size, Second: number of blocks
 #Third: random directory path, Fourth:Random Number to be appended in the file name
 export hdfsPath=/usr/local/hadoop/bin/hdfs
-filename="zerofile$4"
+filename="zerofile"
 echo "File name to be created: $filename"
 #create sample file for testing
 mkdir writeTest
-dd if=/dev/zero of=writeTest/$filename bs=$1 count=$2 conv=fdatasync
+dd if=/dev/zero of=$filename bs=$1 count=$2 conv=fdatasync
 randomDir=$3
+$hdfsPath dfs -mkdir -p /$randomDir
 echo "random directory path: $randomDir"
 #start recording write time
 startWrite=$(date +%s%N)
-$hdfsPath dfs -put writeTest $randomDir 
+$hdfsPath dfs -put $filename /$randomDir 
 returnValue=$?
 #stop recording write time
 stopWrite=$(date +%s%N)
@@ -26,4 +27,4 @@ then
 else
 	echo "Error while writing"	
 fi
-rm -r -f writeTest
+rm $filename
