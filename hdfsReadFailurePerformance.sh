@@ -1,19 +1,20 @@
 #!/bin/bash
 function hdfsRead {
         #start recording read time
-        startRead=$(date -u +"%s")
+        startRead=$(date +%s%N)
 	#pathValue="$($hdfsPath dfs -find / -name zerofile)"
 	pathValue=/hdfsWriteTest/zerofile
         $hdfsPath dfs -get $pathValue
         returnValue=$?
         #stop recording read time
-        stopRead=$(date -u +"%s")
+        stopRead=$(date +%s%N)
 
         if [ "$returnValue" == 0 ]
         then
                 #output the read time
-                echo "Read Time: $(($stopRead-$startRead)) second"
-                echo "Read Time After Failure, $(($stopRead-$startRead))" >> /home/hduser/Desktop/ReqGenOutput/hdfsReadFailureOutput.xls
+                readTimeNano=$(($stopRead-$startRead))
+                echo "Read Time After Failure: $readTime ms"
+		echo "$(($1*$2/1000)), $readTime" >> /home/hduser/Desktop/ReqGenOutput/hdfsReadFailureOutput.xls
         else
                 echo "Error while reading. Time taken:: $(($stopRead-$startRead))" 
                 echo "Read Time After Failure(Error while reading), $(($stopRead-$startRead))" >> /home/hduser/Desktop/ReqGenOutput/hdfsReadFailureOutput.xls
