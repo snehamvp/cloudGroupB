@@ -16,7 +16,7 @@ rados mkpool radosLookup
         do
                 FILE="./cephData/file-$i"
                 touch "$FILE.txt"
-                echo `dd if=/dev/zero of=$FILE.txt bs=100MB count=2 conv=fdatasync`
+                echo `dd if=/dev/zero of=$FILE.txt bs=100MB count=1 conv=fdatasync`
                 rados -p radosLookup put $FILE $FILE.txt
         done
 
@@ -29,6 +29,7 @@ stop_time=$(date -u +"%s%3N")
 
 #Evaluating the lookup time
 echo "Lookup time: $(($stop_time-$start_time)) ms"
+echo "Lookup time: $(($stop_time-$start_time)) ms" >> /root/CloudGroupB_Git_Update/cloudGroupB/ceph_scr/Lookup.xls
 
 #Cleanup
 rados rmpool radosLookup radosLookup --yes-i-really-really-mean-it

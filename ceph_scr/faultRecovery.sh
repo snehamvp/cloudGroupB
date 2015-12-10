@@ -7,8 +7,11 @@ cd dataFile
 dd if=/dev/urandom of=randomfile1 bs=4M count=250 conv=fdatasync
 
 # upload file on ceph
+rados mkpool test_rados
 
+echo "File Upload Started"
 rados -p test_rados put randomfile1 randomfile1
+echo "File Upload Complete"
 
 start_time=$(date -u +"%s%3N")
 lookupout=`ceph osd map test_rados randomfile1`
@@ -80,7 +83,7 @@ do
 done
 echo "${arr_new[@]}"
 
-echo "\n----- ZERO osd down-----"
+echo "----- ZERO osd down-----"
 
 start_time=$(date -u +"%s%3N")
 #ceph osd map test_rados randomfile1
@@ -92,7 +95,7 @@ echo "Read time: $(($stop_time-$start_time)) ms"
 
 
 
-echo "\n-----1 osd down-----"
+echo "----1 osd down-----"
 
 ceph osd out ${array[0]}
 
@@ -113,7 +116,7 @@ echo "Read time: $(($stop_time-$start_time)) ms"
 ceph osd in ${array[0]}
 
 
-echo "\n-----2 osds down-----"
+echo "-----2 osds down-----"
 
 ceph osd out ${array[0]}
 
@@ -133,29 +136,27 @@ echo "Read time: $(($stop_time-$start_time)) ms"
 ceph osd in ${array[0]}
 ceph osd in ${array[1]}
 
-echo "\n-----3 osds down-----"
 
-ceph osd out ${array[0]}
-
-ceph osd out ${array[1]}
-
-ceph osd out ${array[2]}
-
-start_time=$(date -u +"%s%3N")
+#echo "-----3 osds down-----"
+#ceph osd out ${array[0]}
+#ceph osd out ${array[1]}
+#ceph osd out ${array[2]}
+#start_time=$(date -u +"%s%3N")
 #ceph osd map test_rados randomfile1
-rados -p test_rados get randomfile1 test3.out
-stop_time=$(date -u +"%s%3N")
+#rados -p test_rados get randomfile1 test3.out
+#stop_time=$(date -u +"%s%3N")
 
 #Evaluating the fault recovery time
-echo "Read time: $(($stop_time-$start_time)) ms"
+#echo "Read time: $(($stop_time-$start_time)) ms"
 
 #remove out file
 #rm -rf test3.out
 
-ceph osd in ${array[0]}
-ceph osd in ${array[1]}
-ceph osd in ${array[2]}
+#ceph osd in ${array[0]}
+#ceph osd in ${array[1]}
+#ceph osd in ${array[2]}
 
 #cleanup
 cd ..
 rm -rf dataFile
+rados rmpool test_rados test_rados --yes-i-really-really-mean-it
