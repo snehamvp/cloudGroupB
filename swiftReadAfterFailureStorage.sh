@@ -15,18 +15,28 @@ swift-get-nodes object.ring.gz AUTH_system Failure FailureFile >> nodesOutputFil
 # parse the output of the get nodes and get the first 3 ip addresses to make those machines go down
 grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' nodesOutputFile >> iPAddressesFile
 
+# normal read the file
+echo "Normal Read Time Without Failure: $(($stopLookup-$startLookup)) ms" >> CustomizedResult/ReadAfterFailure.xls
+#
+startLookup=$(date -u +%s%3N)
+#
+swift --insecure -A https://$PROXY_LOCAL_NET_IP:8080/auth/v1.0 -U system:root -K testpass download Failure FailureFile >> CustomizedResult/ReadAfterFailure.xls
+#
+stopLookup=$(date -u +%s%3N)
+echo "Normal Read Time Without Failure: $(($stopLookup-$startLookup)) ms" >> CustomizedResult/ReadAfterFailure.xls
+
 # get the 1st machine down
 IPADDRESS1=$(head -1 iPAddressesFile)
 echo "IPAddres--------- $IPADDRESS1"
 ssh swift@$IPADDRESS1 "swift-init all stop; exit"
 # get the 2nd machine down
-IPADDRESS2=$(head -2 iPAddressesFile | tail -1)
-echo "IPAddres--------- $IPADDRESS2"
-ssh swift@$IPADDRESS2 "swift-init all stop; exit"
+#IPADDRESS2=$(head -2 iPAddressesFile | tail -1)
+#echo "IPAddres--------- $IPADDRESS2"
+#ssh swift@$IPADDRESS2 "swift-init all stop; exit"
 # get the 2nd machine down
-IPADDRESS3=$(head -3 iPAddressesFile | tail -1)
-echo "IPAddres--------- $IPADDRESS3"
-ssh swift@$IPADDRESS3 "swift-init all stop; exit"
+#IPADDRESS3=$(head -3 iPAddressesFile | tail -1)
+#echo "IPAddres--------- $IPADDRESS3"
+#ssh swift@$IPADDRESS3 "swift-init all stop; exit"
 
 # start recording lookup time
 startLookup=$(date -u +%s%3N)
@@ -42,11 +52,11 @@ stopLookup=$(date -u +%s%3N)
 if [ "$returnValue" == 0 ]
 then
 	#output the read time
-	echo "Read Time: $(($stopLookup-$startLookup)) ms"
-	echo "Read Time: $(($stopLookup-$startLookup)) ms" >> /home/swift/CustomizedResult/LookupAfterFailure.xls
+	echo "Read Time after Failure: $(($stopLookup-$startLookup)) ms"
+	echo "Read Time after Failure: $(($stopLookup-$startLookup)) ms" >> CustomizedResult/ReadAfterFailure.xls
 else
 	echo "Error while reading. Time taken : $(($stopLookup-$startLookup)) ms" 
-	echo "Error while reading. Time taken : $(($stopLookup-$startLookup)) ms" >> /home/swift/CustomizedResult/LookupAfterFailure.xls
+	echo "Error while reading. Time taken : $(($stopLookup-$startLookup)) ms" >> CustomizedResult/ReadAfterFailure.xls
 fi
 echo "if done"
 
@@ -65,4 +75,3 @@ echo "if done"
 rm nodesOutputFile
 rm iPAddressesFile
 rm FailureFile
-

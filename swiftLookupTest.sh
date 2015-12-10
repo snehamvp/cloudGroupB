@@ -1,7 +1,7 @@
 #!/bin/bash
 # create sample file for testing
 
-for i in {1..2} 
+for i in {1..100} 
 do
 dd if=/dev/urandom of=LookUpFile$i bs=4M count=10 conv=fdatasync
 
